@@ -1,11 +1,12 @@
 class SongsController < ApplicationController
-  def index
-  end
+  before_action :get_song, only: %i[show edit]
 
-  def show
+  def index
+    @songs = Song.all
   end
 
   def new
+    @song = Song.new
   end
 
   def create
@@ -16,10 +17,6 @@ class SongsController < ApplicationController
     else
       render :new
     end
-  end
-
-  def edit
-    @song = Song.find(params[:id])
   end
 
   def update
@@ -37,7 +34,7 @@ class SongsController < ApplicationController
   def destroy
     @song = Song.find(params[:id])
     @song.destroy
-    flash[:notice] = "Song deleted."
+    flash[:notice] = 'Song deleted.'
     redirect_to songs_path
   end
 
@@ -46,5 +43,8 @@ class SongsController < ApplicationController
   def song_params
     params.require(:song).permit(:title)
   end
-end
 
+  def get_song
+    @song = Song.find(params[:id])
+  end
+end
